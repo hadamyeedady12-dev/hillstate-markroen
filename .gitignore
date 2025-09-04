@@ -1,0 +1,29 @@
+# IDE 설정 파일
+.vscode/
+.idea/
+
+# AI 도구 관련
+.claude/
+
+# 테스트 파일
+.playwright-mcp/
+*.test.js
+test/
+
+# 로그 파일
+*.log
+logs/
+
+# 임시 파일
+*.tmp
+*.temp
+.DS_Store
+Thumbs.db
+
+# 환경 설정 (민감한 정보가 있다면)
+.env
+.env.local
+
+# 빌드 파일 (필요시)
+dist/
+build/

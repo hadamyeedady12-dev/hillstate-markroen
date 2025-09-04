@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>힐스테이트 마크로엔 입주민 흥보장터</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="hero">
+                <div class="hero-text hero-apple">
+                    <div class="title-section">
+                        <div class="title-badge">🏢 PREMIUM</div>
+                        <h1 class="hero-title">
+                            <span class="title-main">힐스테이트 마크로엔</span>
+                            <span class="title-sub">입주민 흥보장터</span>
+                        </h1>
+                        <p class="subtitle hero-subtitle">
+                            <i class="fas fa-star"></i>
+                            우리 단지 자영업자분들의 프리미엄 홍보공간
+                            <i class="fas fa-star"></i>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </header>
+
+    <!-- 흥보글 요청 버튼 - 상단 오른쪽 고정 -->
+    <button id="requestPostBtn" class="request-btn enhanced-request-btn fixed-request-btn">
+        <i class="fas fa-comment-dots"></i> 흥보글 요청
+    </button>
+
+    <nav class="nav-tabs">
+        <div class="container">
+            <div class="tabs" id="categoryTabs">
+                <!-- 카테고리 탭이 JavaScript로 동적으로 생성됩니다 -->
+            </div>
+            <!-- 검색 바 -->
+            <div class="search-bar-inline" role="search" aria-label="게시글 검색">
+                <i class="fas fa-magnifying-glass" aria-hidden="true"></i>
+                <input id="searchInput" class="search-input" type="search" placeholder="업체명, 설명, 주소 등으로 검색"
+                    aria-label="검색어 입력">
+            </div>
+            <!-- 정렬 선택 -->
+            <div class="sort-inline">
+                <label for="sortSelect" class="visually-hidden">정렬</label>
+                <select id="sortSelect" class="sort-select" aria-label="정렬 선택">
+                    <option value="recent">최신순</option>
+                    <option value="views">조회수순</option>
+                    <option value="name">가나다순</option>
+                </select>
+            </div>
+            <div class="action-buttons">
+                <!-- 모바일에서만 보이는 다크모드 버튼 -->
+                <button id="mobileThemeToggle" class="mobile-theme-toggle" title="다크모드/라이트모드 전환">
+                    <i class="fas fa-moon" id="mobileThemeIcon"></i>
+                </button>
+                <button id="adminLogoutBtn" class="admin-btn danger" style="display:none">
+                    <i class="fas fa-sign-out-alt"></i> 로그아웃
+                </button>
+                <button id="addPostBtn" class="add-post-btn" style="display:none">
+                    <i class="fas fa-plus"></i> 흥보글 등록
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main">
+        <div class="container">
+            <div class="category-header" id="categoryHeader">
+                <h2 id="categoryTitle">전체 흥보글</h2>
+                <p id="categoryDescription">모든 카테고리의 흥보글을 확인하세요</p>
+            </div>
+
+            <!-- 순서 변경 모드 알림 -->
+            <div class="reorder-mode" id="reorderMode">
+                <div class="reorder-mode-header">
+                    <h3><i class="fas fa-arrows-alt"></i> 카드를 드래그하여 순서를 변경하세요</h3>
+                    <div>
+                        <button class="btn-save-order" id="saveOrderBtn">
+                            <i class="fas fa-save"></i> 저장
+                        </button>
+                        <button class="btn-cancel-order" id="cancelOrderBtn">
+                            <i class="fas fa-times"></i> 취소
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 순서 변경 버튼 (관리자용) -->
+            <div id="reorderControls" style="margin-bottom: 1rem; display: none;">
+                <button class="btn-reorder" id="reorderBtn">
+                    <i class="fas fa-sort"></i> 순서 변경
+                </button>
+            </div>
+
+            <div class="posts-grid" id="postsGrid">
+                <!-- 게시글이 JavaScript로 동적으로 생성됩니다 -->
+            </div>
+
+            <div id="paginationControls" class="pagination-controls" style="display:none;">
+                <button id="loadMoreBtn" class="btn-secondary load-more-btn" aria-label="더 많은 게시글 불러오기">
+                    <i class="fas fa-ellipsis"></i> 더 보기
+                </button>
+            </div>
+
+            <div class="loading" id="loading">
+                <i class="fas fa-spinner fa-spin" aria-hidden="true"></i> 로딩 중...
+            </div>
+        </div>
+    </main>
+
+    <!-- 게시글 상세 모달 -->
+    <div class="modal" id="postModal">
+        <div class="modal-content">
+            <span class="close modal-close" data-target="postModal">&times;</span>
+            <div id="postDetail">
+                <!-- 게시글 상세 내용이 표시됩니다 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 관리자 로그인 모달 -->
+    <div class="modal" id="adminLoginModal">
+        <div class="modal-content">
+            <span class="close modal-close" data-target="adminLoginModal">&times;</span>
+            <h2>관리자 로그인</h2>
+            <form id="adminLoginForm">
+                <div class="form-group">
+                    <label>관리자 암호</label>
+                    <input type="password" id="adminPasscode" placeholder="관리자 암호를 입력하세요" required>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary"><i class="fas fa-unlock"></i> 로그인</button>
+                    <button type="button" class="btn-secondary" id="adminCancelBtn">취소</button>
+                </div>
+                <p class="help-text" style="margin-top:0.75rem; color:#6b7280; font-size:0.9rem;">
+                    참고: 본 로그인은 클라이언트 측 보호 장치로, 보안용이 아닌 간단한 접근 제어입니다.
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <!-- 게시글 등록 모달 -->
+    <div class="modal" id="addPostModal">
+        <div class="modal-content">
+            <span class="close modal-close" data-target="addPostModal">&times;</span>
+            <h2>흥보글 등록</h2>
+            <form id="addPostForm">
+                <div class="form-group">
+                    <label>카테고리 선택</label>
+                    <select id="categorySelect" required>
+                        <!-- 옵션이 JavaScript로 생성됩니다 -->
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>업체명</label>
+                    <input type="text" id="businessName" required>
+                </div>
+
+                <div class="form-group">
+                    <label>대표자명</label>
+                    <input type="text" id="ownerName" required>
+                </div>
+
+                <div class="form-group">
+                    <label>연락처</label>
+                    <input type="tel" id="contact" required>
+                </div>
+
+                <div class="form-group">
+                    <label>주소</label>
+                    <input type="text" id="address" required>
+                </div>
+
+                <div class="form-group">
+                    <label>영업시간</label>
+                    <input type="text" id="businessHours" placeholder="예: 평일 09:00-18:00, 주말 10:00-17:00" required>
+                </div>
+
+                <div class="form-group">
+                    <label>업체 소개</label>
+                    <textarea id="description" rows="4" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>이미지 추가</label>
+
+                    <!-- 파일 업로드 버튼 -->
+                    <div class="image-upload-section">
+                        <input type="file" id="imageFileInput" accept="image/*" multiple style="display: none;">
+                        <button type="button" class="btn-upload" id="imageFileSelectBtn">
+                            <i class="fas fa-upload"></i> 이미지 파일 선택
+                        </button>
+                        <span id="fileCount" class="file-count"></span>
+                    </div>
+
+                    <!-- 이미지 미리보기 영역 -->
+                    <div id="imagePreview" class="image-preview-container"></div>
+
+                    <!-- 기존 URL 입력 필드 -->
+                    <div class="url-input-section">
+                        <label style="font-size: 0.9rem; margin-top: 1rem;">또는 이미지 URL 직접 입력</label>
+                        <textarea id="imageUrls" rows="2" placeholder="이미지 URL을 입력하세요 (여러 개는 줄바꿈 또는 쉼표로 구분)"></textarea>
+                    </div>
+
+                    <p class="help-text" style="margin-top:0.5rem; color:#6b7280; font-size:0.9rem;">
+                        지원 형식: JPG, JPEG, PNG, WEBP, GIF, SVG, BMP, AVIF
+                    </p>
+                </div>
+
+                <div class="form-group">
+                    <label>지도 링크 (선택)</label>
+                    <input type="url" id="locationUrl" placeholder="https://map.naver.com/...">
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">등록하기</button>
+                    <button type="button" id="addPostCancelBtn" class="btn-secondary">취소</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 힐스테이트 마크로엔 입주민 흥보장터. 우리 이웃의 작은 가게를 응원합니다.</p>
+        </div>
+        <!-- 플로팅 컨트롤 그룹 -->
+        <div class="floating-controls">
+            <!-- 테마 토글 버튼 (데스크톱에서만 표시) -->
+            <button id="themeToggleBtn" class="floating-btn theme-toggle-btn desktop-only" title="다크모드/라이트모드 전환">
+                <i class="fas fa-moon" id="themeIcon"></i>
+            </button>
+
+            <!-- 관리자 로그인 버튼 -->
+            <button id="adminFloatingBtn" class="floating-btn admin-floating-btn" title="관리자 로그인">
+                <i class="fas fa-cog"></i>
+            </button>
+        </div>
+    </footer>
+
+    <script>
+        // 즉시 localStorage 초기화 (개발용)
+        console.log('페이지 로드 시작 - localStorage 초기화');
+        localStorage.removeItem('mockCategories');
+        localStorage.removeItem('mockPosts');
+    </script>
+    <script src="js/state.js?v=2.0"></script>
+    <script src="js/api.js?v=2.0"></script>
+    <script src="js/ui.js?v=2.0"></script>
+    <script src="js/images.js?v=2.0"></script>
+    <script src="js/reorder.js?v=2.0"></script>
+    <script src="js/admin.js?v=2.0"></script>
+    <script src="js/theme.js?v=2.0"></script>
+    <script src="js/main.js?v=2.0"></script>
+</body>
+
+</html>
