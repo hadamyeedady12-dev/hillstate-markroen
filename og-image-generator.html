@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="UTF-8">
     <style>
@@ -7,6 +8,7 @@
             margin: 0;
             width: 1200px;
             height: 630px;
+            overflow: hidden;
             background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);
             display: flex;
             align-items: center;
@@ -14,10 +16,16 @@
             font-family: 'Inter', sans-serif;
             color: white;
         }
+
         .container {
             text-align: center;
-            padding: 60px;
+            padding: 40px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
+
         .badge {
             background: #ffd700;
             color: #000;
@@ -28,31 +36,35 @@
             margin-bottom: 20px;
             display: inline-block;
         }
+
         .title {
-            font-size: 48px;
+            font-size: 52px;
             font-weight: 700;
-            margin-bottom: 16px;
-            line-height: 1.2;
-        }
-        .subtitle {
-            font-size: 24px;
-            color: #ffd700;
             margin-bottom: 20px;
+            line-height: 1.1;
         }
+
+        .subtitle {
+            font-size: 36px;
+            color: #ffd700;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+
         .description {
             font-size: 18px;
-            color: rgba(255,255,255,0.8);
+            color: rgba(255, 255, 255, 0.8);
             max-width: 600px;
             margin: 0 auto;
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="badge">🏢 PREMIUM</div>
         <h1 class="title">힐스테이트 마크로엔<br>입주민 흥보장터</h1>
         <p class="subtitle">우리 단지 자영업자분들의 프리미엄 홍보공간</p>
-        <p class="description">카테고리별 체계적 분류로 쉽게 찾는 지역 상점 정보</p>
     </div>
 </body>
-</html>
+</ht
